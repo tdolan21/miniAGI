@@ -17,8 +17,8 @@ import sys
 load_dotenv()
 
 # Initialize Components
-os.environ['OPENAI_API_KEY'] = "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"
-serpapi_api_key = os.environ['SERPAPI_API_KEY'] = "e61b968b298d77f42856fe40e6f67c32d5bc1a2d69e74d312a2e12f0002130b5"
+os.environ['OPENAI_API_KEY'] = ""
+serpapi_api_key = os.environ['SERPAPI_API_KEY'] = ""
 
 docstore = DocstoreExplorer(Wikipedia())
 search = SerpAPIWrapper()
