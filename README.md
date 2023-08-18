@@ -9,9 +9,16 @@ miniAGI is a Streamlit application designed to provide a chat interface with AGI
 - **PGVector**: Vector search for all filetypes storeable by PostgreSQL
 - **Mathematical Queries**: Integration with Wolfram Alpha for answering mathematical questions.
 - **Search Integration**: Ability to answer questions about current events using the SerpAPI.
-
+- **Discord Chat Agent**: Import your discord chat data and have a conversation with it. 
 
 ## ML Features
+
+- **Deeplake**: Large scale data hub for machine learning models and datasets
+- **Banana**: Cloud provider for machine learning models
+- **Potassium**: Banana offers a local server for development of machine learning models that will be uploaded to the cloud. similar to Django or Flask Server for ML models. This can be configured as your BANANA config values in the .env
+
+## Quick Install
+
 
 This guide will serve as a 'quick install':
 
