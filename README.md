@@ -54,4 +54,6 @@ If you just intend on using CPU compute, then a simple pip install will be enoug
 ```bash
 pip install -r "requirements.txt"
 ```
-
+```bash
+streamlit run app.py
+```
