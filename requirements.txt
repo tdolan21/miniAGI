@@ -1,0 +1,7 @@
+banana_dev==5.0.2
+gradio_tools==0.0.9
+langchain==0.0.268
+langchain_experimental==0.0.10
+pandas==2.0.3
+python-dotenv==1.0.0
+streamlit==1.25.0
