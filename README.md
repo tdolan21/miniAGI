@@ -1,3 +1,5 @@
+![image](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white
+
 # miniAGI
 
 miniAGI is a Streamlit application designed to provide a chat interface with AGI (Artificial General Intelligence) capabilities. It leverages various toolkits to answer user queries with decision-making based on the plan and execution model from the Langchain framework.
