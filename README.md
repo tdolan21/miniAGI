@@ -4,6 +4,9 @@
 ![Streamlit](https://img.shields.io/badge/-Streamlit-FF4B4B?logo=streamlit&logoColor=white)
 ![Langchain](https://img.shields.io/badge/-Langchain-3E8FC9?)
 ![PyTorch](https://img.shields.io/badge/-PyTorch-EE4C2C?logo=pytorch&logoColor=white)
+![GitHub Followers](https://img.shields.io/github/followers/tdolan21?label=Follow&style=social)
+![GitHub Stars](https://img.shields.io/github/stars/tdolan21?label=Stars&style=social)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 # miniAGI
 
