@@ -11,6 +11,7 @@ A plan and execution agent that utilizes toolkits designed for data acquisition,
 ![GitHub Stars](https://img.shields.io/github/stars/tdolan21?label=Stars&style=social)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 [![Issues](https://img.shields.io/github/issues/tdolan21/miniAGI.svg)](https://github.com/tdolan21/miniAGI/issues)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/tdolan21)
 
 
 # Table of Contents
