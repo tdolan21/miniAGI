@@ -10,11 +10,9 @@ A plan and execution agent that utilizes toolkits designed for data acquisition,
 ![GitHub Followers](https://img.shields.io/github/followers/tdolan21?label=Follow&style=social)
 ![GitHub Stars](https://img.shields.io/github/stars/tdolan21?label=Stars&style=social)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-[![Release Version](https://img.shields.io/github/release/tdolan21/miniAGI.svg)](https://github.com/tdolan21/miniAGI/releases)
 [![Downloads](https://img.shields.io/github/downloads/tdolan21/miniAGI/total.svg)](https://github.com/tdolan21/miniAGI/releases)
 [![Issues](https://img.shields.io/github/issues/tdolan21/miniAGI.svg)](https://github.com/tdolan21/miniAGI/issues)
-[![Code Coverage](https://img.shields.io/codecov/c/github/tdolan21/miniAGI.svg)](https://codecov.io/gh/tdolan21/miniAGI)
-[![Dependency Status](https://img.shields.io/david/tdolan21/miniAGI.svg)](https://david-dm.org/tdolan21/miniAGI)
+
 
 # Table of Contents
 - [miniAGI](#miniagi)
