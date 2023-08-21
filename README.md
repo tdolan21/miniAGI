@@ -9,14 +9,30 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 # Table of Contents
+- [miniAGI](#miniagi)
+  - [Philosophy](#philosophy)
+  - [AI Features](#ai-features)
+  - [ML Features](#ml-features)
+  - [Quick Install](#quick-install)
+  - [Requirements](#requirements)
+- [In-Depth Guide](#in-depth-guide)
+  - [Environment](#enviornment)
+  - [PostgreSQL and PGVector](#postgresql-and-pgvector)
+  - [API-Keys](#api-keys)
+    - [Base Application (Plan and Execute Agent) (**REQUIRED**)](#base-application-plan-and-execute-agent-required)
+    - [Claude integration (Plan and Execute Agent) (Optional)](#claude-integration-plan-and-execute-agent-optional)
+    - [HuggingfaceHub (Plan and Execute Agent) (Optional, but recommended)](#huggingfacehub-plan-and-execute-agent-optional-but-recommended)
+    - [Banana/Potassium (Plan and Execute Agent) (Fully Optional)](#bananapotassium-plan-and-execute-agent-fully-optional)
+    - [Deeplake (Euclidean Distance Similarity Search with Images) (Optional enterprise tool)](#deeplake-euclidean-distance-similarity-search-with-images-optional-enterprise-tool)
+- [Contributing to miniAGI](#contributing-to-miniagi)
+  - [Code Standards](#code-standards)
+  - [Testing](#testing)
+  - [Documentation](#documentation)
+  - [Submitting Changes](#submitting-changes)
+  - [Code of Conduct](#code-of-conduct)
+  - [Licensing](#licensing)
+  - [Questions?](#questions)
 
-1. [miniAGI](#miniAGI)
-   - [Philosophy](#philosophy)
-   - [AI Features](#ai-features)
-   - [ML Features](#ml-features)
-   - [Quick Install](#quick-install)
-   - [Requirements](#requirements)
-3. [In-Depth Guide](#in-depth-guide)
    - 
 
 # miniAGI
@@ -98,7 +114,7 @@ streamlit run app.py
 # In-Depth Guide
 There will be a docker image deployed soon. In the meantime, its best to start with the conda enviornment mentioned above. If you would like to run this program locally you need to complete the conda set up as well as the PostgreSQL.
 
-## Enviornment
+## Environment
 
 This application requires installation of python and pip. Once you have python and pip installed, you should follow the steps outlined in the [Quick Install](#quick-install). This wil leave you with a python virtual enviornment that is configured for this application and is not affecting your personal machine. The requirements for this project are rather robust, but provide a richer experience than not using these tools. I consider this trade-off to be worth it. You may not and thats okay too.
 
