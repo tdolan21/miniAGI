@@ -1,3 +1,6 @@
+# miniAGI
+A plan and execution agent that utilizes toolkits designed for data acquisition, manipulation, and processing. This environment contains everything you need to source, create, and deploy your machine learning models and chat with them using the plan and execution agent.
+
 ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?logo=postgresql&logoColor=white)
 ![Conda](https://img.shields.io/badge/-Conda-44A833?logo=anaconda&logoColor=white)
@@ -7,6 +10,11 @@
 ![GitHub Followers](https://img.shields.io/github/followers/tdolan21?label=Follow&style=social)
 ![GitHub Stars](https://img.shields.io/github/stars/tdolan21?label=Stars&style=social)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![Release Version](https://img.shields.io/github/release/tdolan21/miniAGI.svg)](https://github.com/tdolan21/miniAGI/releases)
+[![Downloads](https://img.shields.io/github/downloads/tdolan21/miniAGI/total.svg)](https://github.com/tdolan21/miniAGI/releases)
+[![Issues](https://img.shields.io/github/issues/tdolan21/miniAGI.svg)](https://github.com/tdolan21/miniAGI/issues)
+[![Code Coverage](https://img.shields.io/codecov/c/github/tdolan21/miniAGI.svg)](https://codecov.io/gh/tdolan21/miniAGI)
+[![Dependency Status](https://img.shields.io/david/tdolan21/miniAGI.svg)](https://david-dm.org/tdolan21/miniAGI)
 
 # Table of Contents
 - [miniAGI](#miniagi)
