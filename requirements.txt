@@ -13,3 +13,5 @@ wolframalpha
 serpapi
 anthropic
 transformers
+playwright
+beautifulsoup4
