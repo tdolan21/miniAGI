@@ -12,6 +12,8 @@ A plan and execution agent that utilizes toolkits designed for data acquisition,
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 [![Issues](https://img.shields.io/github/issues/tdolan21/miniAGI.svg)](https://github.com/tdolan21/miniAGI/issues)
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/tdolan21)
+[![Playwright](https://img.shields.io/badge/Playwright-v1.12.3-brightgreen)](https://github.com/microsoft/playwright)
+[![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-v4.9.3-brightgreen)](https://www.crummy.com/software/BeautifulSoup/)
 
 
 # Table of Contents
