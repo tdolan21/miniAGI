@@ -149,12 +149,22 @@ These are the API keys required for each section and they are cumulative, meanin
    - [Wolfram](https://products.wolframalpha.com/api/)
    - [SerpAPI](https://serpapi.com/) 
 
+### Google Custom Search
+   - [Google Custom Search](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwibq8LliPGAAxV5F1kFHdIgDB0QFnoECBAQAQ&url=https%3A%2F%2Fdevelopers.google.com%2Fcustom-search%2Fv1%2Fintroduction&usg=AOvVaw1pz8lxgN0a7s9q2JAKILDF&opi=89978449)
+   - [Google Api Key](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiG66X0iPGAAxWkVDUKHRBQAzAQFnoECBUQAQ&url=https%3A%2F%2Fsupport.google.com%2Fgoogleapi%2Fanswer%2F6158862%3Fhl%3Den&usg=AOvVaw2B82tUsH0M884zBo23S1in&opi=89978449)
+   
+
 ### Claude integration (Plan and Execute Agent) (Optional)
 
    Here is some more information on [Claude](https://www.anthropic.com/index/claude-2). Claude allows for longer context input for large datasets and very high level natural language processing. MiniAGI combines that with the ability to use other tools, store your results locally, and chain together more complex queries at once rather than needing to use one query at a time. MiniAGI has the potential to triple your productivity with Claude depending on your specific usecase, your mileage may vary.
    
    - [Anthropic API](https://docs.anthropic.com/claude/reference/getting-started-with-the-api)
-     
+
+### API Calls from external APIs
+
+- [TMDB BEARER TOKEN](https://www.themoviedb.org/settings/api): In the section where the agent is able to make api calls to external apis, the first implemented API is from the movie database. This allows you to collect information on movies where the results are stored in JSON files and imported to your PGVector database for later use.
+- [LISTEN_API_KEY]()
+
 ### HuggingfaceHub (Plan and Execute Agent) (Optional, but recommended)
 
    - [HuggingfaceHub API Token](https://huggingface.co/settings/profile): This API key allows you to configure whatever model you like to use locally through the transformes module. This API connects the 1000+ public models on Huggingface to a plan and execute chat enviornemnt with a plan and execution enviornemnt with file based vector search. This greatly expands the potential of these models. However, as of now these agents are largely not capable of utilizing other tools. Resulting in a more local experience with this agent to offer the best results.

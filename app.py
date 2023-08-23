@@ -11,8 +11,8 @@ from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from langchain import SerpAPIWrapper
 from langchain.agents.tools import Tool
 from langchain.memory import PostgresChatMessageHistory
-
-
+from langchain.utilities.arxiv import ArxivAPIWrapper
+from langchain.utilities.golden_query import GoldenQueryAPIWrapper
 
 load_dotenv()
 
@@ -20,6 +20,8 @@ load_dotenv()
 
 search = SerpAPIWrapper()
 wolfram = WolframAlphaAPIWrapper()
+arxiv = ArxivAPIWrapper()
+golden_query = GoldenQueryAPIWrapper()
 
 
 llm = OpenAI(temperature=0.7, model="gpt-3.5-turbo", streaming=True)
@@ -34,6 +36,16 @@ tools = [
         func=wolfram.run,
         description="useful for when you need to answer questions about math"
     ),
+    Tool(
+        name="Arxiv",
+        func=arxiv.run,
+        description="useful for when you need to answer questions about scholarly articles"
+    ),
+    Tool(
+        name="Golden Query",
+        func=golden_query.run,
+        description="useful for when you need to answer questions about business, finance, and natural language APIs"
+    )
     
     
 ]
