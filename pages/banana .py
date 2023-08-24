@@ -13,8 +13,8 @@ st.warning("This tool requires configuration of an API key and model key on Bana
 
 # Create a reference to your model on Banana
 my_model = client.Client(
-    api_key="fcf9a3b8-6efb-430f-844a-872b79faf687",
-    model_key="1c75c6ce-2563-4d77-901e-6d7ae9b6c11e",
+    api_key="",
+    model_key="",
     url="https://demo-wizardlm-1-0-uncensored-llama2-13b-gptq-llg3o1csfc.run.banana.dev/",
 )
 question = []
