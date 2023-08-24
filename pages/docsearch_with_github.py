@@ -114,7 +114,7 @@ llm = ChatOpenAI(model_name="gpt-4")
 memory = ConversationSummaryMemory(llm=llm,memory_key="chat_history",return_messages=True)
 from langchain.chains.question_answering import load_qa_chain
 qa_chain = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
-qa = RetrievalQA(combine_documents_chain=qa_chain, retriever=tool)
+qa = RetrievalQA(combine_documents_chain=qa_chain, retriever=db.as_retriever())
 
 
 agent_executor = create_conversational_retrieval_agent(llm, tools, verbose=True)
