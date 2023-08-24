@@ -10,8 +10,21 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.document_loaders import DirectoryLoader
 from pathlib import Path
 from langchain.callbacks import StreamlitCallbackHandler
+from langchain.agents.agent_toolkits import create_retriever_tool
+from langchain.agents.agent_toolkits import create_conversational_retrieval_agent
+from langchain.chat_models import ChatOpenAI
+from langchain.memory import PostgresChatMessageHistory
+from dotenv import load_dotenv
+from langchain.chains import RetrievalQA
+from langchain import OpenAI
+load_dotenv()
 
+st.set_page_config(page_title="PGVector Docsearch", page_icon="📚")
 
+history = PostgresChatMessageHistory(
+    connection_string=os.getenv("CONNECTION_STRING"),
+    session_id=os.getenv("SESSION_ID")
+)
 
 loader = DirectoryLoader(Path(os.getenv("DOCUMENTS_PATH")))
 documents = loader.load()
@@ -22,12 +35,12 @@ embeddings = OpenAIEmbeddings()
 
 
 CONNECTION_STRING = PGVector.connection_string_from_db_params(
-    driver=os.environ.get("PGVECTOR_DRIVER", "psycopg2"),
-    host=os.environ.get("PGVECTOR_HOST", "localhost"),
-    port=int(os.environ.get("PGVECTOR_PORT", "5432")),
-    database=os.environ.get("PGVECTOR_DATABASE", "miniAGI"),
-    user=os.environ.get("PGVECTOR_USER", "postgres"),
-    password=os.environ.get("PGVECTOR_PASSWORD", "Royals21"),
+    driver=os.environ.get("PGVECTOR_DRIVER"),
+    host=os.environ.get("PGVECTOR_HOST"),
+    port=int(os.environ.get("PGVECTOR_PORT",)),
+    database=os.environ.get("PGVECTOR_DATABASE"),
+    user=os.environ.get("PGVECTOR_USER"),
+    password=os.environ.get("PGVECTOR_PASSWORD")
 )
 COLLECTION_NAME = "documentation"
 
@@ -43,9 +56,9 @@ store = PGVector(
     embedding_function=embeddings,
 )
 
-st.title("miniAGI :computer:")
+
 st.subheader("PGVector Document Search")
-st.write("Load files to PostgreSQL by putting them into the `documents` folder. Then, click the button below to load them into the database.")
+st.info("Load files to PostgreSQL by putting them into the `documents` folder. Then, click the button below to load them into the database.")
 
 
 # Create columns for repo path, repo name, and process button
@@ -56,10 +69,6 @@ repo_input = col1.text_input("Enter repository path:", value="documents/reposito
 repo_name = col2.text_input("Enter repository link:", value="")
 
 process_button = col3.button("Process")
-
-
-
-
 
 
 
@@ -77,43 +86,63 @@ if process_button:
         parser=LanguageParser(language=Language.PYTHON, parser_threshold=500)
     )
     documents = loader.load()
-    len(documents)
+    st.write(len(documents))
 
     from langchain.text_splitter import RecursiveCharacterTextSplitter
     python_splitter = RecursiveCharacterTextSplitter.from_language(language=Language.PYTHON, 
                                                                 chunk_size=2000, 
                                                                 chunk_overlap=200)
     texts = python_splitter.split_documents(documents)
-    len(texts)
+    st.write(len(texts))
     
 
 
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationSummaryMemory
-from langchain.chains import ConversationalRetrievalChain
-retriever = db.as_retriever(
+
+db.as_retriever(
     search_type="mmr",
-    search_kwargs={"k": 8},
+    search_kwargs={'k': 6, 'lambda_mult': 0.25}
 )
+tool = create_retriever_tool(
+    db.as_retriever(), 
+    "search_postgres",
+    "Searches and returns documents from the postgreSQL vector database."
+)
+tools = [tool]
 llm = ChatOpenAI(model_name="gpt-4") 
 memory = ConversationSummaryMemory(llm=llm,memory_key="chat_history",return_messages=True)
-qa = ConversationalRetrievalChain.from_llm(llm, retriever=retriever, memory=memory)
+from langchain.chains.question_answering import load_qa_chain
+qa_chain = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
+qa = RetrievalQA(combine_documents_chain=qa_chain, retriever=tool)
 
 
+agent_executor = create_conversational_retrieval_agent(llm, tools, verbose=True)
 
+# Create a radio button with two options
+# execution_mode = st.sidebar.radio("Choose Execution Mode:", ("Use QA", "Use Agent Executor"))
 
+# Based on the selected option, execute the corresponding code
 if prompt := st.chat_input():
+    # if execution_mode == "Use QA":
+    
+    result = qa.run(prompt)  # Replace 'qa' with the appropriate function
+      # Replace 'agent_executor' with the appropriate function
+
     st.chat_message("user").write(prompt)
+    history.add_user_message(prompt)
 
-    result = qa(prompt)
     with st.chat_message("assistant"):
-            st_callback = StreamlitCallbackHandler(st.container())
-            
-            st.write(prompt)
+        st_callback = StreamlitCallbackHandler(st.container())
+        st.write(prompt)
 
-            st.write(result['answer'])
-            
-            
+        # Conditional write based on the selected execution mode
+        # if execution_mode == "Use QA":
+        st.write(result)
+        
+        
+        history.add_ai_message(result)
+
 
 
 

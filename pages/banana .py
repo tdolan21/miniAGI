@@ -9,7 +9,7 @@ import banana_dev as client
 load_dotenv()
 
 st.title("Chat with your ML using a banana server :banana:")
-st.subheader("Under construction :construction:")
+st.warning("This tool requires configuration of an API key and model key on Banana.")
 
 # Create a reference to your model on Banana
 my_model = client.Client(
