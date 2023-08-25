@@ -41,7 +41,6 @@ A plan and execution agent that utilizes toolkits designed for data acquisition,
   - [Licensing](#licensing)
   - [Questions?](#questions)
 
-   - 
 
 # miniAGI
 
@@ -182,11 +181,12 @@ These are the API keys required for each section and they are cumulative, meanin
    - There is almost certainly something on the activeloop public resources that is of use to you and can better aid your development process. They also offer a web based visalization tool that pairs quite well with the chat interface for further customization and tuning of your machine learning environment. 
    - This tool is currently under construction and is the most complex of all the integrations. However, it is functional at the base level if your configurations are correct. I will be updating the readme to fit whatever new features are added in the future, but expect this feautre to grow quite a bit.
 
-## Future of miniAGI
+## Plugins
 
 I have started a plugin repository named [miniAGI-plugins](https://github.com/tdolan21/miniAGI-plugins). This repo is currently under construction, but I have several plugins already functioning. I just need to standardize them and develop a structure for everyone to use.
 
 These plugins include game simulations in a gymnasium environment and a debate simulation with an agent moderator. They will debate an ethical issue with a search and memory toolkit.
+
 
 # Contributing to miniAGI
 

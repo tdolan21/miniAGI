@@ -5,6 +5,7 @@ from langchain.llms import Banana
 from langchain import PromptTemplate, LLMChain
 from dotenv import load_dotenv
 import banana_dev as client
+import os
 
 load_dotenv()
 
@@ -13,8 +14,8 @@ st.warning("This tool requires configuration of an API key and model key on Bana
 
 # Create a reference to your model on Banana
 my_model = client.Client(
-    api_key="",
-    model_key="",
+    api_key=os.getenv("BANANA_API_KEY"),
+    model_key=os.getenv("BANANA_MODEL_KEY"),
     url="https://demo-wizardlm-1-0-uncensored-llama2-13b-gptq-llg3o1csfc.run.banana.dev/",
 )
 question = []

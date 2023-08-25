@@ -1,4 +1,6 @@
 from langchain import HuggingFaceHub
+from langchain.llms import HuggingFacePipeline
+from langchain.embeddings import HuggingFaceHubEmbeddings
 from langchain import PromptTemplate, LLMChain
 import streamlit as st
 from langchain.callbacks import StreamlitCallbackHandler
