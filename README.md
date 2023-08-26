@@ -76,6 +76,7 @@ DISCLAIMER: This agent does **not** have the freedom to use shell commands or fr
 - **Deeplake**: Large scale data hub for machine learning models and datasets
 - **Banana**: Cloud provider for machine learning models
 - **Potassium**: Banana offers a local server for development of machine learning models that will be uploaded to the cloud. similar to Django or Flask Server for ML models. This can be configured as your BANANA config values in the .env
+- **Train and Visualize**: I included a rudimentary space to test and visualize small CSV datasets and train a model based on the data you select. It will then provide a small visuzalization on the actual model using shad. The feature is currently limited in functionality, but will be expanded upon greatly.
 
 ## Quick Install
 
@@ -181,11 +182,17 @@ These are the API keys required for each section and they are cumulative, meanin
    - There is almost certainly something on the activeloop public resources that is of use to you and can better aid your development process. They also offer a web based visalization tool that pairs quite well with the chat interface for further customization and tuning of your machine learning environment. 
    - This tool is currently under construction and is the most complex of all the integrations. However, it is functional at the base level if your configurations are correct. I will be updating the readme to fit whatever new features are added in the future, but expect this feautre to grow quite a bit.
 
+### Deeplake Codebase Agent
+
+    - This agent uses The QARetrievalChain and the Deeplake Hub to create a vector search database out of your existing codebase. The user can define a location to create the vectorstore and it will discover all of the available python files in that folder structure and split them in half. It could be an odd number because it keeps the structure of the functions rather than a hard character limit. 
+
 ## Plugins
 
 I have started a plugin repository named [miniAGI-plugins](https://github.com/tdolan21/miniAGI-plugins). This repo is currently under construction, but I have several plugins already functioning. I just need to standardize them and develop a structure for everyone to use.
 
 These plugins include game simulations in a gymnasium environment and a debate simulation with an agent moderator. They will debate an ethical issue with a search and memory toolkit.
+
+Other examples include the ability to chat with your discord data that can be retrieved via discord. 
 
 
 # Contributing to miniAGI

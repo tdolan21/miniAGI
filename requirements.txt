@@ -16,3 +16,4 @@ transformers
 playwright
 beautifulsoup4
 google-api-python-client
+shad
