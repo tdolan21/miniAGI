@@ -70,6 +70,8 @@ if "shared" not in st.session_state:
 st.title("miniAGI :computer:")
 st.subheader("AGI with more targeted toolkits with decision making based on the plan and execution model from langchain")
 
+
+
 if prompt := st.chat_input():
     st.chat_message("user").write(prompt)
     history.add_user_message(prompt)
