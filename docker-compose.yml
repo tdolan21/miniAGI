@@ -1,0 +1,63 @@
+version: '3.1'
+
+services:
+  web:
+    image: miniagi:latest
+    build: .
+    ports:
+      - "8501:8501"
+    networks:
+      miniagi_network:
+        aliases:
+          - web
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      SERPAPI_API_KEY: ${SERPAPI_API_KEY}
+      WOLFRAM_ALPHA_APPID: ${WOLFRAM_ALPHA_APPID}
+      GOLDEN_API_KEY: ${GOLDEN_API_KEY}
+      HUGGINGFACEHUB_API_TOKEN: ${HUGGINGFACEHUB_API_TOKEN}
+      DOCUMENTS_PATH: ${DOCUMENTS_PATH}
+      BANANA_API_KEY: ${BANANA_API_KEY}
+      MODEL_KEY: ${MODEL_KEY}
+      ACTIVELOOP_TOKEN: ${ACTIVELOOP_TOKEN}
+      ACTIVELOOP_DATASET_PATH: ${ACTIVELOOP_DATASET_PATH}
+      ACTIVELOOP_HUB_PATH: ${ACTIVELOOP_HUB_PATH}
+      ACTIVELOOP_USERNAME: ${ACTIVELOOP_USERNAME}
+      ACTIVELOOP_ROOT_DIR: ${ACTIVELOOP_ROOT_DIR}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      TMDB_BEARER_TOKEN: ${TMDB_BEARER_TOKEN}
+      LISTEN_API_KEY: ${LISTEN_API_KEY}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      GOOGLE_CSE_ID: ${GOOGLE_CSE_ID}
+      CONNECTION_STRING: ${CONNECTION_STRING}
+      PGVECTOR_DRIVER: ${PGVECTOR_DRIVER}
+      PGVECTOR_HOST: ${PGVECTOR_HOST}
+      PGVECTOR_PORT: ${PGVECTOR_PORT}
+      PGVECTOR_DATABASE: ${PGVECTOR_DATABASE}
+      PGVECTOR_USER: ${PGVECTOR_USER}
+      PGVECTOR_PASSWORD: ${PGVECTOR_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      
+    depends_on:
+      - db
+
+  db:
+    image: ankane/pgvector:latest
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      miniagi_network:
+        aliases:
+          - db
+
+networks:
+  miniagi_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

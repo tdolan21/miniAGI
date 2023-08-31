@@ -13,18 +13,106 @@ from langchain.agents.tools import Tool
 from langchain.memory import PostgresChatMessageHistory
 from langchain.utilities.arxiv import ArxivAPIWrapper
 from langchain.utilities.golden_query import GoldenQueryAPIWrapper
+from langchain.vectorstores.pgvector import PGVector
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.document_loaders import DirectoryLoader
+from pathlib import Path
+from langchain.agents.agent_toolkits import create_retriever_tool
+from langchain.callbacks import get_openai_callback
+import asyncio
+from langchain.tools import PubmedQueryRun
+from langchain.tools.python.tool import PythonREPLTool
+from PIL import Image
+from langchain.memory import ConversationBufferMemory
+from unstructured import partition
+from langchain.document_loaders import UnstructuredFileLoader, UnstructuredImageLoader
+import psycopg2
+from psycopg2 import OperationalError
+
+ 
 
 load_dotenv()
 
+try:
+    # Connect to the PostgreSQL database
+    connection = psycopg2.connect(
+        user=os.getenv('POSTGRES_USER'),
+        # password=os.getenv('POSTGRES_PASSWORD'),
+        host=os.getenv('POSTGRES_HOST'),  # use the alias you set in docker-compose for the database service
+        port="5432",
+        database=os.getenv('POSTGRES_DB')
+    )
+
+    # Create a cursor object
+    cursor = connection.cursor()
+
+    # Execute a simple query
+    cursor.execute("SELECT 1;")
+    result = cursor.fetchone()
+    print(f"Successfully connected. Query result: {result}")
+
+except OperationalError as e:
+    print(f"Error occurred: {e}")
+
+finally:
+    # Close the connections and cursor
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+
+
+
+CONNECTION_STRING = PGVector.connection_string_from_db_params(
+    driver=os.environ.get("PGVECTOR_DRIVER"),
+    host=os.environ.get("PGVECTOR_HOST"),
+    port=int(os.environ.get("PGVECTOR_PORT",)),
+    database=os.environ.get("PGVECTOR_DATABASE"),
+    user=os.environ.get("PGVECTOR_USER"),
+    password=os.environ.get("PGVECTOR_PASSWORD")
+)
+COLLECTION_NAME = "documentation"
+
+loader = DirectoryLoader(Path(os.getenv("DOCUMENTS_PATH")))
+documents = loader.load()
+text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+docs = text_splitter.split_documents(documents)
+embeddings = OpenAIEmbeddings()
+
+db = PGVector.from_documents(
+    embedding=embeddings,
+    documents=docs,
+    collection_name=COLLECTION_NAME,
+    connection_string=CONNECTION_STRING,
+)
+store = PGVector(
+    collection_name=COLLECTION_NAME,
+    connection_string=CONNECTION_STRING,
+    embedding_function=embeddings,
+)
+
+db.as_retriever(
+    search_type="mmr",
+    search_kwargs={'k': 6, 'lambda_mult': 0.25}
+)
+posgresVector = create_retriever_tool(
+    db.as_retriever(), 
+    "search_postgres",
+    "Searches and returns documents from the postgreSQL vector database."
+)
 
 
 search = SerpAPIWrapper()
 wolfram = WolframAlphaAPIWrapper()
 arxiv = ArxivAPIWrapper()
 golden_query = GoldenQueryAPIWrapper()
+pubmed = PubmedQueryRun()
+python_repl = PythonREPLTool()
 
 
 llm = OpenAI(temperature=0.7, model="gpt-3.5-turbo", streaming=True)
+
 tools = [
     Tool(
         name = "Search",
@@ -45,6 +133,22 @@ tools = [
         name="Golden Query",
         func=golden_query.run,
         description="useful for when you need to answer questions about business, finance, and natural language APIs"
+    ),
+    Tool(
+        name="Postgres Vector",
+        func=posgresVector.run,
+        description="useful for when you need to answer questions about documents on the postgres database"
+    ),
+    Tool(
+        name="Pubmed",
+        func=pubmed.run,
+        description="useful for when you need to query citations from pubmed about medical literature"
+    ),
+    Tool(
+        name="Python REPL",
+        func=python_repl.run,
+        description="useful for when you need to write or execute python code"
+        
     )
     
     
@@ -55,20 +159,34 @@ history = PostgresChatMessageHistory(
     session_id="16390",
 )
 
+logo = "logos/cropped_logo_blue.png"
+st.sidebar.image(logo, use_column_width=True)
 
-model = ChatOpenAI(temperature=0)
+user_model = st.sidebar.selectbox("Select your GPT model", [
+    "gpt-3.5-turbo-16k",
+    "gpt-3.5-turbo",
+    "gpt-4"
+
+])
+
+user_temperature = st.sidebar.slider("Select your GPT temperature", 0.0, 1.0, 0.7, 0.01)
+# Create a slider for tokens
+selected_tokens = st.sidebar.slider("Select number of tokens", min_value=4000, max_value=16000, value=6000, step=10)
+
+model = ChatOpenAI(temperature=user_temperature, model_name=user_model, max_tokens=selected_tokens, streaming=True,)
+
 planner = load_chat_planner(model)
 executor = load_agent_executor(model, tools, verbose=True)
-agent = PlanAndExecute(planner=planner, executor=executor, verbose=True)
-
+agent = initialize_agent(tools, model, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
     
 
 if "shared" not in st.session_state:
    st.session_state["shared"] = True
 
-st.title("miniAGI :computer:")
-st.subheader("AGI with more targeted toolkits with decision making based on the plan and execution model from langchain")
+st.title("miniAGI 🤖")
+st.info("Zero-shot ReAct agent with a targeted toolkit that allows for large scale data collection with far less hallucination.")
 
 
 
@@ -77,7 +195,8 @@ if prompt := st.chat_input():
     history.add_user_message(prompt)
     with st.chat_message("assistant"):
         st_callback = StreamlitCallbackHandler(st.container())
-        response = agent.run(prompt, callbacks=[st_callback])
+        with get_openai_callback():
+            response = agent.run(prompt, callbacks=[st_callback])
         st.write(response)
         history.add_ai_message(response)
         

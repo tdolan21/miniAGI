@@ -1,5 +1,9 @@
+![miniAGI Logo](logos/cropped_logo_blue.png)
+
+
 # miniAGI
-A plan and execution agent that utilizes toolkits designed for data acquisition, manipulation, and processing. This environment contains everything you need to source, create, and deploy your machine learning models and chat with them using the plan and execution agent.
+
+A Zero-shot ReAct agent that utilizes toolkits designed for data acquisition, manipulation, and processing. This environment contains everything you need to source, create, and deploy your machine learning models and chat with them using your configured agent.
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?logo=postgresql&logoColor=white)
@@ -14,6 +18,8 @@ A plan and execution agent that utilizes toolkits designed for data acquisition,
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/tdolan21)
 [![Playwright](https://img.shields.io/badge/Playwright-v1.12.3-brightgreen)](https://github.com/microsoft/playwright)
 [![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-v4.9.3-brightgreen)](https://www.crummy.com/software/BeautifulSoup/)
+![Built with OpenAI](https://img.shields.io/badge/Built%20with-OpenAI-2877ff)
+
 
 
 # Table of Contents
@@ -22,12 +28,15 @@ A plan and execution agent that utilizes toolkits designed for data acquisition,
   - [AI Features](#ai-features)
   - [ML Features](#ml-features)
   - [Quick Install](#quick-install)
-  - [Requirements](#requirements)
+  - [Linux](#linux)
+  - [Docker](#docker)
+  - [Local Requirements](#local-requirements)
 - [In-Depth Guide](#in-depth-guide)
-  - [Environment](#enviornment)
+  - [Environment](#environment)
   - [PostgreSQL and PGVector](#postgresql-and-pgvector)
   - [API-Keys](#api-keys)
     - [Base Application (Plan and Execute Agent) (**REQUIRED**)](#base-application-plan-and-execute-agent-required)
+    - [Plugins](#plugins)
     - [Claude integration (Plan and Execute Agent) (Optional)](#claude-integration-plan-and-execute-agent-optional)
     - [HuggingfaceHub (Plan and Execute Agent) (Optional, but recommended)](#huggingfacehub-plan-and-execute-agent-optional-but-recommended)
     - [Banana/Potassium (Plan and Execute Agent) (Fully Optional)](#bananapotassium-plan-and-execute-agent-fully-optional)
@@ -80,8 +89,9 @@ DISCLAIMER: This agent does **not** have the freedom to use shell commands or fr
 
 ## Quick Install
 
+### Linux
 
-This guide will serve as a 'quick install':
+This guide will serve as a 'quick install' for linux machines:
 
 
 1. Clone the repository:
@@ -91,8 +101,47 @@ This guide will serve as a 'quick install':
    cd miniAGI
    mv .env.example .env
    ```
+   Once you have created you own .env file, you need to fill out the environment variables and run:
 
-## Requirements
+   ```bash
+   bash miniAGI.sh
+   ```
+
+### Docker
+
+The initial process is the same. Clone the repo, access the directory, create the .env.
+
+ ```bash
+ git clone https://github.com/tdolan21/miniAGI.git
+ cd miniAGI
+ mv .env.example .env
+ ```
+ After this is completed you will need to add your actual API credentials to the.env that has been created.
+
+ #### Building the image
+
+ This will build the image for the first time. It may take a few minutes. You have time to get more coffee.
+
+ ```bash
+ docker build -t miniagi .
+ ```
+ #### Running the image
+
+ Replace "mysecretpassword" with your desired password.
+
+ ```bash
+ docker run -e "POSTGRES_PASSWORD=mysecretpassword" miniagi
+ ```
+ #### Using Docker Compose
+
+ ```bash
+ docker-compose up       # To start the services
+ docker-compose down -v    # To stop the services
+ ```
+
+## Local Requirements
+
+This section outlines what the miniAGI.sh script is doing.
 
 The reccommended enviornment to run this application is through a conda virtual enviornment. 
 
@@ -120,7 +169,8 @@ streamlit run app.py
 ```
 
 # In-Depth Guide
-There will be a docker image deployed soon. In the meantime, its best to start with the conda enviornment mentioned above. If you would like to run this program locally you need to complete the conda set up as well as the PostgreSQL.
+
+
 
 ## Environment
 
@@ -147,12 +197,22 @@ These are the API keys required for each section and they are cumulative, meanin
 ### Base Application (Plan and Execute Agent) (**REQUIRED**)
    - [OpenAI](https://platform.openai.com/playground)
    - [Wolfram](https://products.wolframalpha.com/api/)
-   - [SerpAPI](https://serpapi.com/) 
+   - [SerpAPI](https://serpapi.com/)
+   - [Golden](https://docs.golden.com/reference/getting-started)
+   - [HuggingfaceHub API Token](https://huggingface.co/settings/profile): This API key allows you to configure whatever model you like to use locally through the transformes module. This API connects the 1000+ public models on Huggingface to a plan and execute chat enviornemnt with a plan and execution enviornemnt with file based vector search. This greatly expands the potential of these models. However, as of now these agents are largely not capable of utilizing other tools. Resulting in a more local experience with this agent to offer the best results.
+   - [Deeplake](https://www.deeplake.ai/)
 
 ### Google Custom Search
    - [Google Custom Search](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwibq8LliPGAAxV5F1kFHdIgDB0QFnoECBAQAQ&url=https%3A%2F%2Fdevelopers.google.com%2Fcustom-search%2Fv1%2Fintroduction&usg=AOvVaw1pz8lxgN0a7s9q2JAKILDF&opi=89978449)
    - [Google Api Key](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiG66X0iPGAAxWkVDUKHRBQAzAQFnoECBUQAQ&url=https%3A%2F%2Fsupport.google.com%2Fgoogleapi%2Fanswer%2F6158862%3Fhl%3Den&usg=AOvVaw2B82tUsH0M884zBo23S1in&opi=89978449)
    
+## Plugins
+
+I have started a plugin repository named [miniAGI-plugins](https://github.com/tdolan21/miniAGI-plugins). This repo is currently under construction, but I have several plugins already functioning. I just need to standardize them and develop a structure for everyone to use.
+
+These plugins include game simulations in a gymnasium environment and a debate simulation with an agent moderator. They will debate an ethical issue with a search and memory toolkit.
+
+Other examples include the ability to chat with your discord data that can be retrieved via discord. The descriptions below are examples of the plugins currently available.
 
 ### Claude integration (Plan and Execute Agent) (Optional)
 
@@ -162,12 +222,8 @@ These are the API keys required for each section and they are cumulative, meanin
 
 ### API Calls from external APIs
 
-- [TMDB BEARER TOKEN](https://www.themoviedb.org/settings/api): In the section where the agent is able to make api calls to external apis, the first implemented API is from the movie database. This allows you to collect information on movies where the results are stored in JSON files and imported to your PGVector database for later use.
-- [LISTEN_API_KEY]()
-
-### HuggingfaceHub (Plan and Execute Agent) (Optional, but recommended)
-
-   - [HuggingfaceHub API Token](https://huggingface.co/settings/profile): This API key allows you to configure whatever model you like to use locally through the transformes module. This API connects the 1000+ public models on Huggingface to a plan and execute chat enviornemnt with a plan and execution enviornemnt with file based vector search. This greatly expands the potential of these models. However, as of now these agents are largely not capable of utilizing other tools. Resulting in a more local experience with this agent to offer the best results.
+- [TMDB BEARER TOKEN](https://www.themoviedb.org/settings/api): In the section where the agent is able to make api calls to external apis, the first implemented API is from the movie database. This allows you to collect information on movies where the results are stored in YAML files and imported to your PGVector database for later use.
+- [LISTEN_API_KEY](https://www.listennotes.com/api/): This api is used in the same way, but this api has access to ~3.2M podcasts and ~175M episodes of podcasts. It is updated regularly and can be used for data acquisition or simple research. The results of this are also stored in YAML files and can be utilized by PGVector. Example yaml output can be found in 'documents/api_yaml'
      
 
 ### Banana/Potassium (Plan and Execute Agent) (Fully Optional)
@@ -185,14 +241,6 @@ These are the API keys required for each section and they are cumulative, meanin
 ### Deeplake Codebase Agent
 
     - This agent uses The QARetrievalChain and the Deeplake Hub to create a vector search database out of your existing codebase. The user can define a location to create the vectorstore and it will discover all of the available python files in that folder structure and split them in half. It could be an odd number because it keeps the structure of the functions rather than a hard character limit. 
-
-## Plugins
-
-I have started a plugin repository named [miniAGI-plugins](https://github.com/tdolan21/miniAGI-plugins). This repo is currently under construction, but I have several plugins already functioning. I just need to standardize them and develop a structure for everyone to use.
-
-These plugins include game simulations in a gymnasium environment and a debate simulation with an agent moderator. They will debate an ethical issue with a search and memory toolkit.
-
-Other examples include the ability to chat with your discord data that can be retrieved via discord. 
 
 
 # Contributing to miniAGI

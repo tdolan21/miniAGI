@@ -17,6 +17,7 @@ from langchain.memory import PostgresChatMessageHistory
 from dotenv import load_dotenv
 from langchain.chains import RetrievalQA
 from langchain import OpenAI
+
 load_dotenv()
 
 st.set_page_config(page_title="PGVector Docsearch", page_icon="📚")
@@ -61,14 +62,13 @@ st.subheader("PGVector Document Search")
 st.info("Load files to PostgreSQL by putting them into the `documents` folder. Then, click the button below to load them into the database.")
 
 
-# Create columns for repo path, repo name, and process button
-col1, col2, col3 = st.columns(3)
+sidebar_info = st.sidebar.info("Use this to import github repositories into the database.")
 # Clone
-repo_input = col1.text_input("Enter repository path:", value="documents/repositories")
+repo_input = st.sidebar.text_input("Enter repository path:", value="documents/repositories")
 # Input for repository name
-repo_name = col2.text_input("Enter repository link:", value="")
+repo_name = st.sidebar.text_input("Enter repository link:", value="")
 
-process_button = col3.button("Process")
+process_button = st.sidebar.button("Process")
 
 
 
