@@ -17,22 +17,28 @@ from langchain.memory import PostgresChatMessageHistory
 from dotenv import load_dotenv
 from langchain.chains import RetrievalQA
 from langchain import OpenAI
+import os
+import psycopg2
+import unstructured
+from psycopg2 import OperationalError
+
+
 
 load_dotenv()
 
+
+
+
 st.set_page_config(page_title="PGVector Docsearch", page_icon="📚")
 
-history = PostgresChatMessageHistory(
-    connection_string=os.getenv("CONNECTION_STRING"),
-    session_id=os.getenv("SESSION_ID")
-)
+
+
 
 loader = DirectoryLoader(Path(os.getenv("DOCUMENTS_PATH")))
 documents = loader.load()
 text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 docs = text_splitter.split_documents(documents)
 embeddings = OpenAIEmbeddings()
-
 
 
 CONNECTION_STRING = PGVector.connection_string_from_db_params(
@@ -45,18 +51,23 @@ CONNECTION_STRING = PGVector.connection_string_from_db_params(
 )
 COLLECTION_NAME = "documentation"
 
+
 db = PGVector.from_documents(
     embedding=embeddings,
     documents=docs,
     collection_name=COLLECTION_NAME,
-    connection_string=CONNECTION_STRING,
+    connection_string=os.getenv("CONNECTION_STRING"),
 )
 store = PGVector(
     collection_name=COLLECTION_NAME,
-    connection_string=CONNECTION_STRING,
+    connection_string=os.getenv("CONNECTION_STRING"),
     embedding_function=embeddings,
 )
 
+history = PostgresChatMessageHistory(
+    connection_string=os.getenv("CONNECTION_STRING"),
+    session_id=os.getenv("SESSION_ID")
+)
 
 st.subheader("PGVector Document Search")
 st.info("Load files to PostgreSQL by putting them into the `documents` folder. Then, click the button below to load them into the database.")
@@ -64,7 +75,7 @@ st.info("Load files to PostgreSQL by putting them into the `documents` folder. T
 
 sidebar_info = st.sidebar.info("Use this to import github repositories into the database.")
 # Clone
-repo_input = st.sidebar.text_input("Enter repository path:", value="documents/repositories")
+repo_input = st.sidebar.text_input("Enter repository path:", value="/app/documents/repositories")
 # Input for repository name
 repo_name = st.sidebar.text_input("Enter repository link:", value="")
 
@@ -111,7 +122,7 @@ tool = create_retriever_tool(
 )
 tools = [tool]
 llm = ChatOpenAI(model_name="gpt-4") 
-memory = ConversationSummaryMemory(llm=llm,memory_key="chat_history",return_messages=True)
+memory = ConversationSummaryMemory(llm=llm,memory_key="chat_history",return_messages=False)
 from langchain.chains.question_answering import load_qa_chain
 qa_chain = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
 qa = RetrievalQA(combine_documents_chain=qa_chain, retriever=db.as_retriever())
@@ -119,6 +130,9 @@ qa = RetrievalQA(combine_documents_chain=qa_chain, retriever=db.as_retriever())
 
 agent_executor = create_conversational_retrieval_agent(llm, tools, verbose=True)
 
+if "shared" not in st.session_state:
+   st.session_state["shared"] = True
+   
 # Create a radio button with two options
 # execution_mode = st.sidebar.radio("Choose Execution Mode:", ("Use QA", "Use Agent Executor"))
 

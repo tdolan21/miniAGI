@@ -38,6 +38,7 @@ def fetch_templates():
     cur.close()
     conn.close()
     return templates
+
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
