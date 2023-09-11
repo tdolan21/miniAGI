@@ -64,6 +64,11 @@ miniAGI is a Streamlit application designed to provide a chat interface with AGI
 
 Plugins are available at https://github.com/tdolan21/miniAGI-plugins
 
+<video width="320" height="240" controls>
+  <source src="assets/demo_videos/miniAGI_demo.mp4" type="video/mp4">
+</video>
+
+
 ## Philosophy
 
 I recognize the immediate criticism surrounding the fact that AGI applications can be heavy token consumers. This one has the potential to be the same based on your intended use. However, the agent in this application is the plan and execute agent from langchain, and is configured to have the decision making process only last 3 steps. This leads to an increased thought process rather than allowing the agent to make the choices on its own. It does not have long term context in this manor, but it does have both message memory and vector memory combined with several powerful tools.
