@@ -64,9 +64,7 @@ miniAGI is a Streamlit application designed to provide a chat interface with AGI
 
 Plugins are available at https://github.com/tdolan21/miniAGI-plugins
 
-<video width="320" height="240" controls>
-  <source src="assets/demo_videos/miniAGI_demo.mp4" type="video/mp4">
-</video>
+
 
 
 ## Philosophy
