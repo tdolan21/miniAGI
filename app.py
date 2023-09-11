@@ -168,7 +168,7 @@ if "shared" not in st.session_state:
    st.session_state["shared"] = True
 
 st.title("miniAGI 🤖")
-st.info("Zero-shot ReAct agent with a targeted toolkit that allows for large scale data collection with far less hallucination.")
+
 
 
 
