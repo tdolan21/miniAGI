@@ -1,4 +1,4 @@
-![miniAGI Logo](logos/cropped_logo_blue.png)
+![miniAGI Logo](assets/logos/cropped_logo_blue.png)
 
 
 # miniAGI
@@ -19,41 +19,50 @@ A Zero-shot ReAct agent that utilizes toolkits designed for data acquisition, ma
 [![Playwright](https://img.shields.io/badge/Playwright-v1.12.3-brightgreen)](https://github.com/microsoft/playwright)
 [![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-v4.9.3-brightgreen)](https://www.crummy.com/software/BeautifulSoup/)
 ![Built with OpenAI](https://img.shields.io/badge/Built%20with-OpenAI-2877ff)
+[![Join our Discord](https://dcbadge.vercel.app/api/server/rzfPeBnRpe)](https://discord.gg/rzfPeBnRpe)
 
 
 
 # Table of Contents
-- [miniAGI](#miniagi)
-  - [Philosophy](#philosophy)
-  - [AI Features](#ai-features)
-  - [ML Features](#ml-features)
-  - [Quick Install](#quick-install)
-  - [Linux](#linux)
-  - [Docker](#docker)
-  - [Local Requirements](#local-requirements)
-- [In-Depth Guide](#in-depth-guide)
-  - [Environment](#environment)
-  - [PostgreSQL and PGVector](#postgresql-and-pgvector)
-  - [API-Keys](#api-keys)
-    - [Base Application (Plan and Execute Agent) (**REQUIRED**)](#base-application-plan-and-execute-agent-required)
-    - [Plugins](#plugins)
-    - [Claude integration (Plan and Execute Agent) (Optional)](#claude-integration-plan-and-execute-agent-optional)
-    - [HuggingfaceHub (Plan and Execute Agent) (Optional, but recommended)](#huggingfacehub-plan-and-execute-agent-optional-but-recommended)
-    - [Banana/Potassium (Plan and Execute Agent) (Fully Optional)](#bananapotassium-plan-and-execute-agent-fully-optional)
-    - [Deeplake (Euclidean Distance Similarity Search with Images) (Optional enterprise tool)](#deeplake-euclidean-distance-similarity-search-with-images-optional-enterprise-tool)
-- [Contributing to miniAGI](#contributing-to-miniagi)
-  - [Code Standards](#code-standards)
-  - [Testing](#testing)
-  - [Documentation](#documentation)
-  - [Submitting Changes](#submitting-changes)
-  - [Code of Conduct](#code-of-conduct)
-  - [Licensing](#licensing)
-  - [Questions?](#questions)
+
+1. [Overview](#Overview)
+   - [Philosophy](#Philosophy)
+   - [Disclaimer](#Disclaimer)
+2. [Quick Install](#Quick-Install)
+   - [Linux](#Linux)
+   - [Docker](#Docker)
+3. [Local Requirements](#Local-Requirements)
+4. [In-Depth Guide](#In-Depth-Guide)
+   - [Known Issues](#known-issues)
+   - [Features](#Features)
+   - [ML Features](#ML-Features)
+   - [Environment](#Environment)
+   - [PostgreSQL and PGVector](#PostgreSQL-and-PGVector)
+   - [API-Keys](#API-Keys)
+5. [Plugins](#Plugins)
+   - [Claude integration](#Claude-integration)
+   - [API Calls from external APIs](#API-Calls-from-external-APIs)
+   - [Banana/Potassium](#Banana/Potassium)
+   - [Deeplake](#Deeplake)
+   - [Deeplake Codebase Agent](#Deeplake-Codebase-Agent)
+6. [Contributing to miniAGI](#Contributing-to-miniAGI)
+   - [Code Standards](#Code-Standards)
+   - [Testing](#Testing)
+   - [Documentation](#Documentation)
+   - [Submitting Changes](#Submitting-Changes)
+   - [Code of Conduct](#Code-of-Conduct)
+7. [Licensing](#Licensing)
+8. [Questions and Contact](#Questions)
 
 
-# miniAGI
+
+
+
+# Overview
 
 miniAGI is a Streamlit application designed to provide a chat interface with AGI (Artificial General Intelligence) capabilities. It leverages various toolkits to answer user queries with decision-making based on the plan and execution model from the Langchain framework.
+
+Plugins are available at https://github.com/tdolan21/miniAGI-plugins
 
 ## Philosophy
 
@@ -69,23 +78,9 @@ Considering this, all functionality of this application is experimental and shou
 
 The results of a more targeted goal and toolset include a more predictable experience where you can focus on experimentation with the plan and execute agent at whatever level you wish, rather than having it eat all your tokens and cost more. The agents will get there, but having more realistic goals and use cases is very important along the way.
 
-DISCLAIMER: This agent does **not** have the freedom to use shell commands or freely access files on your machine. The only files it has access to locally are the files you put in the documents folder and the subdirectories required for each tool. 
+### Disclaimer 
+This agent does **not** have the freedom to use shell commands or freely access files on your machine. The only files it has access to locally are the files you put in the documents folder and the subdirectories required for each tool. 
 
-## AI Features
-
-- **Chat Interface**: Interactive chat interface where the plan and execute agent can choose between predefined functions. The prompt can also be a chain if you define your own chain prompt in the code. This will be among the first features addressed on the roadmap.
-- **PostgreSQL**: Utilizes a PostgreSQL database for managing chat message history. Requires installation of PostgreSQL 15 and PGVector
-- **PGVector**: Vector search for all filetypes storeable by PostgreSQL
-- **Mathematical Queries**: Integration with Wolfram Alpha for answering mathematical questions.
-- **Search Integration**: Ability to answer questions about current events using the SerpAPI.
-- **Discord Chat Agent**: Import your discord chat data and have a conversation with it. 
-
-## ML Features
-
-- **Deeplake**: Large scale data hub for machine learning models and datasets
-- **Banana**: Cloud provider for machine learning models
-- **Potassium**: Banana offers a local server for development of machine learning models that will be uploaded to the cloud. similar to Django or Flask Server for ML models. This can be configured as your BANANA config values in the .env
-- **Train and Visualize**: I included a rudimentary space to test and visualize small CSV datasets and train a model based on the data you select. It will then provide a small visuzalization on the actual model using shad. The feature is currently limited in functionality, but will be expanded upon greatly.
 
 ## Quick Install
 
@@ -108,6 +103,8 @@ This guide will serve as a 'quick install' for linux machines:
    ```
 
 ### Docker
+
+**Windows machines MUST use docker**
 
 The initial process is the same. Clone the repo, access the directory, create the .env.
 
@@ -139,14 +136,18 @@ The initial process is the same. Clone the repo, access the directory, create th
  docker-compose down -v    # To stop the services
  ```
 
+
 ## Local Requirements
+
+**This application does NOT work locally with windows**
+
+More information can be found at https://github.com/pgvector/pgvector
 
 This section outlines what the miniAGI.sh script is doing.
 
-The reccommended enviornment to run this application is through a conda virtual enviornment. 
+The reccommended environment to run this application is through a conda virtual environment. 
 
-If you are unfamillar with conda here are the install instructions for both [Linux](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) and [Windows](https://docs.conda.io/projects/conda/en/latest/user-guide/install/windows.html)
-
+If you are unfamillar with conda here are the install instructions for [Linux](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html)
 
 ```bash 
 conda create --name miniAGI python=3.9
@@ -154,12 +155,12 @@ conda activate miniAGI
 ```
 If you want to use an nVidia GPU as compute for rendering machine learning models in the various modules, you should initialize the conda env like this before using pip install.
 
-Ensure that the enviornment is activated before continuing this portion.
+Ensure that the environment is activated before continuing this portion.
 ```bash
 conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 ```
 
-If you just intend on using CPU compute, then a simple pip install will be enough once the conda enviornment has been created.
+If you just intend on using CPU compute, then a simple pip install will be enough once the conda environment has been created.
 
 ```bash
 pip install -r "requirements.txt"
@@ -170,11 +171,48 @@ streamlit run app.py
 
 # In-Depth Guide
 
+## Known issues
+
+ You will get this error: 
+
+ ```
+ miniagi-db-1   | 2023-09-11 17:19:38.073 UTC [68] FATAL:  password authentication failed for user "postgres"
+miniagi-db-1   | 2023-09-11 17:19:38.073 UTC [68] DETAIL:  Connection matched pg_hba.conf line 100: "host all all all scram-sha-256"
+miniagi-db-1   | 2023-09-11 17:19:38.090 UTC [69] FATAL:  password authentication failed for user "postgres"
+miniagi-db-1   | 2023-09-11 17:19:38.090 UTC [69] DETAIL:  Connection matched pg_hba.conf line 100: "host all all all scram-sha-256"
+ ```
+
+ This error is a bug with the usage of the pgvector docker image in conjunction with using standard postgreSQL functionality.
+
+ However, even with the error present, database connection can be accurately proven through the different feautres and everything still works as expected.
+
+ The database should not throw this error as the connection is made via either SHA-256 password or trust on local networks.
+
+ If you wish to change this or attempt to fix the bug, the file you will need is the pg_hba.conf and is located at:
+
+ ```
+ /var/lib/postgresql/data
+ ```
+
+## Features
+
+- **Chat Interface**: Interactive chat interface where the plan and execute agent can choose between predefined functions. The prompt can also be a chain if you define your own chain prompt in the code. This will be among the first features addressed on the roadmap.
+- **PostgreSQL**: Utilizes a PostgreSQL database for managing chat message history. Requires installation of PostgreSQL 15 and PGVector
+- **PGVector**: Vector search for all filetypes storeable by PostgreSQL
+- **Mathematical Queries**: Integration with Wolfram Alpha for answering mathematical questions.
+- **Search Integration**: Ability to answer questions about current events using the SerpAPI.
+- **Deeplake**: This feature is available as a plugin because it is a more niche usecase. Activeloop provides 250+ datasets for machine learning and this application allows you to import them to chat with or use for image similarity search. The plugin is available [here](https://github.com/tdolan21/miniAGI-plugins)
+- **Banana**: Plan and Execute agent integration for your own cloud hosted models through banana.
+- **Potassium**: Banana offers a local server for development of machine learning models that will be uploaded to the cloud. similar to Django or Flask Server for ML models. This can be configured as your BANANA config values in the .env
+- **Train and Visualize**: I included a rudimentary space to test and visualize small CSV datasets and train a model based on the data you select. It will then provide a small visuzalization on the actual model using shad. The feature is currently limited in functionality, but will be expanded upon greatly.
+- **HuggingFace Hub**: The huggingface agi section allows the user to explore the zero-shot ReAct agent using their own resources and model of their choosing. Models can be saved to the database for future use if you find one you like. This section relies on your CPU/GPU and is quite resource intensive. 10GB+ VRAM is ideal for the provided 7B parameter models. CPU embeddings are completed by FAISS. 
+- **Playwright Web Retriever**: Allows the agent to interact with a browser in a dedicated playwright environment. This is not a search tool useable by miniAGI, but an additional agent with a different purpose.
+
 
 
 ## Environment
 
-This application requires installation of python and pip. Once you have python and pip installed, you should follow the steps outlined in the [Quick Install](#quick-install). This wil leave you with a python virtual enviornment that is configured for this application and is not affecting your personal machine. The requirements for this project are rather robust, but provide a richer experience than not using these tools. I consider this trade-off to be worth it. You may not and thats okay too.
+This application requires installation of python and pip. Once you have python and pip installed, you should follow the steps outlined in the [Quick Install](#quick-install). This will leave you with a Python virtual environment that is configured for this application and is not affecting your personal machine. The requirements for this project are rather robust, but provide a richer experience than not using these tools. I consider this trade-off to be worth it. You may not and thats okay too.
 
 ## PostgreSQL and PGVector
 
@@ -194,11 +232,11 @@ This application requires the use of several different API keys to use all the a
 
 These are the API keys required for each section and they are cumulative, meaning you cant skip the first section and many things are required throughout:
 
-### Base Application (Plan and Execute Agent) (**REQUIRED**)
-   - [OpenAI](https://platform.openai.com/playground)
-   - [Wolfram](https://products.wolframalpha.com/api/)
-   - [SerpAPI](https://serpapi.com/)
-   - [Golden](https://docs.golden.com/reference/getting-started)
+### Base Application (Zero-shot ReAct Agent) (**REQUIRED**)
+   - [OpenAI](https://platform.openai.com/playground): Needed for the entire application.
+   - [Wolfram](https://products.wolframalpha.com/api/): Needed as a tool for miniAGI.
+   - [SerpAPI](https://serpapi.com/): Needed for the search tool used by miniAGI.
+   - [Golden](https://docs.golden.com/reference/getting-started): Golden is an API with technical data
    - [HuggingfaceHub API Token](https://huggingface.co/settings/profile): This API key allows you to configure whatever model you like to use locally through the transformes module. This API connects the 1000+ public models on Huggingface to a plan and execute chat enviornemnt with a plan and execution enviornemnt with file based vector search. This greatly expands the potential of these models. However, as of now these agents are largely not capable of utilizing other tools. Resulting in a more local experience with this agent to offer the best results.
    - [Deeplake](https://www.deeplake.ai/)
 
@@ -227,7 +265,7 @@ Other examples include the ability to chat with your discord data that can be re
      
 
 ### Banana/Potassium (Plan and Execute Agent) (Fully Optional)
-   - [Banana](https://www.banana.dev/): This service allows the user to host their own machine learning models from the cloud and use them as an API in applications. It is integrated to this application in the same way as the other serivces, being the plan and execution agent. This service is costly and is a production machine learning enviornment. This is not required at all, but is very useful if you are building your own chat model or another model where you want to be able to use metrics in your other research. The default model that is configured is TheBloke/WizardLM-1.0-Uncensored-Llama2-13B-GPTQ, but you will have to configure and deploy whatever model you wish. The WizardVicuna ideaology was originally created by Eric Hartford, but on this project, the quantized version from TheBloke is used.
+   - [Banana](https://www.banana.dev/): This service allows the user to host their own machine learning models from the cloud and use them as an API in applications. It is integrated to this application in the same way as the other serivces, being the plan and execution agent. This service is costly and is a production machine learning environment. This is not required at all, but is very useful if you are building your own chat model or another model where you want to be able to use metrics in your other research. The default model that is configured is TheBloke/WizardLM-1.0-Uncensored-Llama2-13B-GPTQ, but you will have to configure and deploy whatever model you wish. The WizardVicuna ideaology was originally created by Eric Hartford, but on this project, the quantized version from TheBloke is used.
      
    - [Potassium](https://github.com/bananaml/potassium): If you are still working on your project you can connect this via the Potassium server functionality and then connect your local integration rather than a cloud integration. This allows the user to save money on deployment costs while still maintaining a similar testing experience.
    

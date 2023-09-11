@@ -34,34 +34,16 @@ from psycopg2 import OperationalError
 
 load_dotenv()
 
-try:
-    # Connect to the PostgreSQL database
-    connection = psycopg2.connect(
-        user=os.getenv('POSTGRES_USER'),
-        # password=os.getenv('POSTGRES_PASSWORD'),
-        host=os.getenv('POSTGRES_HOST'),  # use the alias you set in docker-compose for the database service
-        port="5432",
-        database=os.getenv('POSTGRES_DB')
+# Database connection
+def connect_db():
+    return psycopg2.connect(
+        dbname=os.getenv("PGVECTOR_DATABASE"),
+        user=os.getenv("PGVECTOR_USER"),
+        password=os.getenv("PGVECTOR_PASSWORD"), 
+        host=os.getenv("PGVECTOR_HOST")
     )
 
-    # Create a cursor object
-    cursor = connection.cursor()
-
-    # Execute a simple query
-    cursor.execute("SELECT 1;")
-    result = cursor.fetchone()
-    print(f"Successfully connected. Query result: {result}")
-
-except OperationalError as e:
-    print(f"Error occurred: {e}")
-
-finally:
-    # Close the connections and cursor
-    if cursor:
-        cursor.close()
-    if connection:
-        connection.close()
-
+connect_db()
 
 
 CONNECTION_STRING = PGVector.connection_string_from_db_params(
@@ -159,7 +141,7 @@ history = PostgresChatMessageHistory(
     session_id="16390",
 )
 
-logo = "logos/cropped_logo_blue.png"
+logo = "assets/logos/cropped_logo_blue.png"
 st.sidebar.image(logo, use_column_width=True)
 
 user_model = st.sidebar.selectbox("Select your GPT model", [
