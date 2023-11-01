@@ -4,6 +4,13 @@ services:
   web:
     image: miniagi:latest
     build: .
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     ports:
       - "8501:8501"
     networks:

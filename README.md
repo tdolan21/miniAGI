@@ -125,13 +125,7 @@ The initial process is the same. Clone the repo, access the directory, create th
  ```bash
  docker build -t miniagi .
  ```
- #### Running the image
 
- Replace "mysecretpassword" with your desired password.
-
- ```bash
- docker run -e "POSTGRES_PASSWORD=mysecretpassword" miniagi
- ```
  #### Using Docker Compose
 
  ```bash

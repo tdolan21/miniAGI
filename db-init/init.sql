@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS prompt_templates (
 
 -- Populate prompt_templates table
 INSERT INTO prompt_templates (name, template) VALUES
+('QA', '{question}'),
 ('Python Basics', 'Write a Python function that provides a solution to {question} following PEP8 guidelines'),
 ('Machine Learning Intro', 'Explain the concept of {question} in machine learning.');
 

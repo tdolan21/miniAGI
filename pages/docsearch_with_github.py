@@ -124,7 +124,7 @@ tools = [tool]
 llm = ChatOpenAI(model_name="gpt-4") 
 memory = ConversationSummaryMemory(llm=llm,memory_key="chat_history",return_messages=False)
 from langchain.chains.question_answering import load_qa_chain
-qa_chain = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
+qa_chain = load_qa_chain(OpenAI(temperature=0.4), chain_type="stuff")
 qa = RetrievalQA(combine_documents_chain=qa_chain, retriever=db.as_retriever())
 
 
@@ -144,7 +144,7 @@ if prompt := st.chat_input():
       # Replace 'agent_executor' with the appropriate function
 
     st.chat_message("user").write(prompt)
-    history.add_user_message(prompt)
+    
 
     with st.chat_message("assistant"):
         st_callback = StreamlitCallbackHandler(st.container())
@@ -155,7 +155,7 @@ if prompt := st.chat_input():
         st.write(result)
         
         
-        history.add_ai_message(result)
+       
 
 
 

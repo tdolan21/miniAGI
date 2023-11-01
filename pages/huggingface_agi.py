@@ -14,7 +14,10 @@ from langchain.document_loaders import DirectoryLoader
 from langchain.callbacks import StreamlitCallbackHandler
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import VectorStoreRetrieverMemory
+from langchain.memory import PostgresChatMessageHistory
 from PyPDF2 import PdfReader
+from langchain.llms import VLLM
 import psycopg2
 import os
 
@@ -60,10 +63,11 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chunks):
-    embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
+    embeddings = HuggingFaceInstructEmbeddings(model_name="jinaai/jina-embeddings-v2-base-en")
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
 
     return vectorstore
+
 def get_conversation_chain(vectorstore):
     
     llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
@@ -77,9 +81,14 @@ def get_conversation_chain(vectorstore):
     )
     return conversation_chain
     
+history = PostgresChatMessageHistory(
+    connection_string=os.getenv("CONNECTION_STRING"),
+    session_id="16390",
+)
 
 # Main Page
 templates = fetch_templates()
+st.set_page_config(layout="wide")
 # Place the selectbox in the sidebar
 selected_template = st.sidebar.selectbox("Select a template", templates, format_func=lambda x: x[1])
 with st.sidebar:
@@ -100,7 +109,13 @@ with st.sidebar:
                 # create conversation chain
                 st.session_state.conversation = get_conversation_chain(
                     vectorstore)
-
+                
+                
+st.sidebar.divider()
+temperature = st.sidebar.slider("Temperature", 0.0, 1.0, 0.5, 0.1)
+st.sidebar.divider()
+max_length = st.sidebar.slider("Max Length", 0, 2048, 1024, 32)
+st.sidebar.divider()
 
 question = ""
 
@@ -117,20 +132,47 @@ st.info("This is a search engine for several hugging face models. This section i
 # Text generation models only, no text2text models
 # See https://huggingface.co/models?pipeline_tag=text-generation&sort=downloads for some other options
 repo_id = st.selectbox("Select a model",
-                       ("tiiuae/falcon-7b", "Qwen/Qwen-7B" ))  
+                       ("tiiuae/falcon-7b", "Qwen/Qwen-7B"))  
+
 llm = HuggingFaceHub(
-    repo_id=repo_id, model_kwargs={"temperature": 0.5, "max_length": 250}
+    repo_id=repo_id, model_kwargs={"temperature": temperature, "max_length": max_length}
 )
+## uncomment this if you have at least a 20series nvdia gpu. Recomment the llm declaration above
+#  This implementation is much faster
+## Requires at least GPU compute capability 8.0
+
+# max_new_tokens = st.sidebar.slider("Max New Tokens", 0, 2048, 1024, 32)
+# top_k = st.sidebar.slider("Top K", 0, 100, 50, 1)
+# top_p = st.sidebar.slider("Top P", 0.0, 1.0, 0.95, 0.01)
+# temperature = st.sidebar.slider("Temperature", 0.0, 1.0, 0.5, 0.01)
+# llm = VLLM(model=repo_id,
+#            trust_remote_code=True,  # mandatory for hf models
+#            max_new_tokens=256,
+#            top_k=10,
+#            top_p=0.95,
+#            temperature=0.8,
+# )
+
 llm_chain = LLMChain(prompt=prompt, llm=llm)
           
 
 if prompt := st.chat_input():
     st.chat_message("user").write(prompt)
     question = prompt
+    history.add_user_message(question)
     with st.chat_message("assistant"):
         st_callback = StreamlitCallbackHandler(st.container())
        
-        st.write(llm_chain.run(question))   
+        st.write(llm_chain.run(question))
+        # create vector store
+        vectorstore = get_vectorstore(text_chunks)
+
+                # create conversation chain
+        st.session_state.conversation = get_conversation_chain(
+                    vectorstore)
+    
+        history.add_ai_message(llm_chain.run(question))
+
     
         
            

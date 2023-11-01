@@ -239,4 +239,5 @@ wrapt==1.15.0
 xmltodict==0.13.0
 yarg==0.1.9
 yarl==1.9.2
+yfinance
 zipp==3.16.2

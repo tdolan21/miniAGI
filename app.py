@@ -8,7 +8,6 @@ import os
 from langchain.chat_models import ChatOpenAI
 from langchain_experimental.plan_and_execute import PlanAndExecute, load_agent_executor, load_chat_planner
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
-from langchain.tools.yahoo_finance_news import YahooFinanceNewsTool
 from langchain import SerpAPIWrapper
 from langchain.agents.tools import Tool
 from langchain.memory import PostgresChatMessageHistory
@@ -87,7 +86,6 @@ posgresVector = create_retriever_tool(
 
 
 search = SerpAPIWrapper()
-yfin =  YahooFinanceNewsTool()
 wolfram = WolframAlphaAPIWrapper()
 arxiv = ArxivAPIWrapper()
 golden_query = GoldenQueryAPIWrapper()
@@ -133,13 +131,8 @@ tools = [
         func=python_repl.run,
         description="useful for when you need to write or execute python code"
         
-    ),
-    Tool(
-        name="Yahoo Finance News",
-        func=yfin.run,
-        description="useful for when you need to query current finance information or make predictions on businesses"
-        
     )
+
     
     
     
